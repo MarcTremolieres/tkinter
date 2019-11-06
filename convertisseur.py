@@ -25,7 +25,7 @@ class Convertisseur(Frame):
         self.valeur.set(str(self.nombre.valeur))
 #        disp_valeur.insert(0, self.nombre.valeur)
         disp_valeur.pack(side = RIGHT, expand = True)
-        self.valeur.trace('w', self.update_valeur())
+        disp_valeur.bind("<Return>", self.update_valeur)
 
         frame2 = Frame(self, relief = RAISED, borderwidth = 1)
         frame2.pack(fill = BOTH)
@@ -37,20 +37,34 @@ class Convertisseur(Frame):
         self.base.set(self.nombre.base)
 #        disp_base.insert(0, self.nombre.base)
         disp_base.pack(side = RIGHT, expand=True)
+        disp_base.bind("<Return>", self.update_base)
+
 
         frame3 = Frame(self, relief=RAISED, borderwidth=1)
         frame3.pack(fill=BOTH)
+        self.ecriture = StringVar()
         label3 = Label(frame3, text="Ecriture")
         label3.pack(side=LEFT)
-        disp_base = Entry(frame3, textvar = self.ecriture)
-        disp_base.delete(0, END)
+        disp_ecriture = Entry(frame3, textvar = self.ecriture)
+        disp_ecriture.delete(0, END)
         self.ecriture.set(self.nombre.represente())
 #        disp_base.insert(0, self.nombre.represente())
-        disp_base.pack(side=RIGHT, expand=True)
+        disp_ecriture.pack(side=RIGHT, expand=True)
+        disp_ecriture.bind("<Return>", self.update_ecriture)
 
-    def update_valeur(self):
+    def update_valeur(self, event):
         self.nombre.valeur = int(self.valeur.get())
         self.ecriture.set(self.nombre.represente())
+        print("updated")
+
+    def update_base(self, event):
+        self.nombre.base = int(self.base.get())
+        self.ecriture.set(self.nombre.represente())
+        print("updated")
+
+    def update_ecriture(self, event):
+        self.nombre.update_valeur(str(self.ecriture.get()))
+        self.valeur.set(str(self.nombre.valeur))
 
 
 def main():
